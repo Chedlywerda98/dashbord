@@ -1,0 +1,35 @@
+<style>
+	.note {
+		background-color: #f2f2f2;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+	.note .user {
+		font-weight: bold;
+		margin-right: 10px;
+	}
+
+	.note .bot {
+		color: #666;
+	}
+</style>
+
+
+{{#if conversations}}
+	<ul>
+		{{#each conversations}}
+			<li class="note">
+				<span class="user">{{this.user_input}}</span>
+				<span class="bot">{{this.bot_response}}</span>         
+                <button onclick="deleteConv('{{this._id}}')">Delete</button>
+			</li>
+
+		{{/each}}
+	</ul>
+{{else}}
+	<p>No conversations found.</p>
+{{/if}}
+
+
+
