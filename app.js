@@ -30,18 +30,6 @@ db.on("error", (error) => {
 });
 
 
-const conversationSchema = new mongoose.Schema({
-  user_input: [{ type: String, required: true }],
-  bot_response: { type: String, required: true }
-}, { collection: 'Convs' });
-
-const Conversation = mongoose.model('Conversation', conversationSchema);
-
-module.exports = Conversation;
-
-
-
-
 const users = mongoose.model('Users', {
 	username: {
 		type: String,
@@ -53,7 +41,27 @@ const users = mongoose.model('Users', {
 	}
 });
 
+const conversationSchema = new mongoose.Schema({
+  user_input: [{ type: String, required: true }],
+  bot_response: { type: String, required: true }
+}, { collection: 'Convs' });
+
+const Conversation = mongoose.model('Conversation', conversationSchema);
+
+
+const QRSchema = new mongoose.Schema({
+	intents: [{
+	  tag: { type: String, required: true },
+	  patterns: { type: [String], required: true },
+	  responses: { type: [String], required: true }
+	}]
+}, { collection: 'QR' });
   
+const question = mongoose.model('question', QRSchema);
+  
+
+  
+
 
 
 // Middleware
@@ -122,35 +130,31 @@ function isLoggedOut(req, res, next) {
 
 // ROUTES
 app.get('/', isLoggedIn, (req, res) => {
-	res.render("index", { title: "Conversations" });
+	res.render("index", { title: "Home" });
   });
 
 
-  app.get('/conversations', isLoggedIn, function(req, res) {
+app.get('/conversations', isLoggedIn, function(req, res) {
 	Conversation.find().then(function(conversations) {
-	  res.render('conversations', { conversations: conversations });
+	  res.render('conversations',{ title: "Conversation" ,conversations: conversations });
+	}).catch(function(error) {
+	  console.log(error);
+	  res.status(500).send('Internal Server Error');
+	});
+});
+
+
+app.get('/questions', isLoggedIn, function(req, res) {
+	question.find({}).then(function(questions) {
+	  res.render('questions', { title: "Q/R", questions: questions });
 	}).catch(function(error) {
 	  console.log(error);
 	  res.status(500).send('Internal Server Error');
 	});
   });
   
-
-
-// Delete conversation
-router.delete('/conversations/:id', async (req, res) => {
-	try {
-	  const deletedConv = await Conversation.findByIdAndDelete(req.params.id);
-	  if (!deletedConv) {
-		return res.status(404).send();
-	  }
-	  res.send(deletedConv);
-	} catch (error) {
-	  res.status(500).send(error);
-	}
-  });
-
-
+  
+  
 
 app.get('/login', isLoggedOut, (req, res) => {
 	const response = {
@@ -174,9 +178,23 @@ app.get('/logout', function(req, res){
 	  res.redirect('/');
 	});
   });
+
+
+  // Delete conversation
+router.delete('/conversations/:id', async (req, res) => {
+	try {
+	  const deletedConv = await Conversation.findByIdAndDelete(req.params.id);
+	  if (!deletedConv) {
+		return res.status(404).send();
+	  }
+	  res.send(deletedConv);
+	} catch (error) {
+	  res.status(500).send(error);
+	}
+  });
   
 
-
+app.use('/', router);
 
 app.listen(3000, () => {
 	console.log("Listening on port 3000");

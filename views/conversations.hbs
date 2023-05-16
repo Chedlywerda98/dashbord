@@ -13,8 +13,39 @@
 	.note .bot {
 		color: #666;
 	}
+
+    .delete-btn {
+        background-color: #f44336;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
 </style>
 
+
+<navbar class="navbar-container">
+       
+
+        <div class="bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="nav-items">
+            <li class="nav-link"><a href="/conversations">conversations</a></li>
+            <li class="nav-link"><a href="/">Home</a></li>
+            <li class="nav-link"><a href="/questions">Q_R</a></li>
+            <li class="nav-link"><a href="/logout">LogOut</a></li>
+        </ul>
+</navbar>
 
 {{#if conversations}}
 	<ul>
@@ -22,7 +53,7 @@
 			<li class="note">
 				<span class="user">{{this.user_input}}</span>
 				<span class="bot">{{this.bot_response}}</span>         
-                <button onclick="deleteConv('{{this._id}}')">Delete</button>
+                <button class="delete-btn" onclick="deleteConv('{{this._id}}')">Delete</button>
 			</li>
 
 		{{/each}}
@@ -31,5 +62,18 @@
 	<p>No conversations found.</p>
 {{/if}}
 
-
-
+<script>
+   function deleteConv(id) {
+    fetch('/conversations/' + id, { method: 'DELETE' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete conversation');
+            }
+            alert('Conversation deleted successfully!');
+            location.reload();
+        })
+        .catch(error => {
+            console.error(error);
+        });
+	}
+</script>

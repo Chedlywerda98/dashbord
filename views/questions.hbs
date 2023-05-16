@@ -1,0 +1,79 @@
+<navbar class="navbar-container">
+       
+
+        <div class="bars">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <ul class="nav-items">
+            <li class="nav-link"><a href="/conversations">conversations</a></li>
+            <li class="nav-link"><a href="/">Home</a></li>
+            <li class="nav-link"><a href="/questions">Q_R</a></li>
+            <li class="nav-link"><a href="/logout">LogOut</a></li>
+        </ul>
+</navbar>
+
+
+<head>
+  <title>Questions</title>
+</head>
+<body>
+  <h1>Questions</h1>
+
+  <style>
+	.note {
+		background-color: #f2f2f2;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+	.note .user {
+		font-weight: bold;
+		margin-right: 10px;
+	}
+
+	.note .bot {
+		color: #666;
+	}
+
+    .delete-btn {
+        background-color: #f44336;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+</style>
+
+
+  {{#each questions}}
+  <li class="note">
+    <div>
+      {{#each this.intents}}
+        <h2>Tag: {{this.tag}}</h2>
+        <h3>Patterns:</h3>
+        <ul>
+          {{#each this.patterns}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+        <h3>Responses:</h3>
+        <ul>
+          {{#each this.responses}}
+            <li>{{this}}</li>
+          {{/each}}
+        </ul>
+      {{/each}}
+    </div>
+    <hr>
+    </li>
+  {{/each}}
+</body>
