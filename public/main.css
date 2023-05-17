@@ -6,10 +6,6 @@
 	font-family: 'Fira sans', sans-serif;
 }
 
-body {
-	background-color: #2F4960;
-	background-image: linear-gradient(to bottom right, #2F4960 10%, #102040);
-}
 
 .app {
 	display: flex;
@@ -124,21 +120,6 @@ ul {
 	margin-right: 10px;
   }
   
-  li:nth-child(odd) {
-	background-color: #f2f2f2;
-  }
-  
-  li:nth-child(odd) strong {
-	color: #555;
-  }
-  
-  li:nth-child(even) {
-	background-color: #ddd;
-  }
-  
-  li:nth-child(even) strong {
-	color: #333;
-  }
   
   .conversations {
 	margin: 20px;
@@ -203,6 +184,8 @@ ul {
   
   body {
     background: rgba(11, 5, 29, 0.946);
+	background-image: url('https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1517&q=80');
+
 }
 
 a {
@@ -231,7 +214,7 @@ a {
 }
 
 .navbar-container .nav-items .nav-link a {
-    color: #191414;
+    color: #ffffff;
     transition: 0.2s;
     -webkit-transition: 0.2s;
     -moz-transition: 0.2s;
@@ -244,7 +227,7 @@ a {
 .navbar-container .nav-items .nav-link:after {
     display: block;
     content: "";
-    border-top: 2px solid rgb(140, 73, 254);
+    border-top: 2px solid rgb(45, 168, 202);
     transform: scaleX(0);
     -webkit-transform: scaleX(0);
     -moz-transform: scaleX(0);
@@ -277,8 +260,7 @@ a {
 }
 
 .navbar-container .nav-items .login-register .button {
-    color: #fff;
-    border: 2px solid rgb(116, 36, 255);
+    color: #ffffff;
     padding: 5px 20px;
     border-radius:3px ;
     -webkit-border-radius:3px ;
@@ -309,3 +291,486 @@ a {
     text-align: center;
 }
  
+
+
+
+
+
+
+
+
+
+
+.hizmet-kart a:visited,
+.hizmet-kart a:active,
+.hizmet-kart a:focus {
+  color: #333;
+  text-decoration: none;
+}
+
+.hizmet-kart {
+  margin-bottom: 30px;
+}
+
+.hizmet-icon {
+  width: 15px;
+  height: 19px;
+  vertical-align: middle;
+  margin-top: -3px;
+  margin-right: 3px;
+}
+
+.hizmet-icon.karticon {
+  margin-left: 3px;
+  margin-right: 3px;
+  margin-top: -2px;
+}
+
+.hizmet-kart-img {
+  width: 43%;
+  float: right;
+  height: auto;
+}
+
+.hizmet-kart-icerik {
+  width: 57%;
+  float: left;
+  padding-right: 10px;
+}
+
+.hizmet-kart-a {
+  color: #333;
+  background: white;
+  display: block
+}
+
+.hizmet-kart-a:hover {
+  color: #333;
+}
+
+.hizmet-kart-icerik h3 {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+.hizmet-kart-img img {
+  width: 100%;
+  height: 221px;
+}
+
+.hizmet-ozellik {
+  margin-bottom: 10px;
+}
+
+.fa-credit-card-alt {
+  margin: 0 5px;
+}
+
+.yellow {
+  color: #ffc000 !important;
+}
+
+.buton-kapsa {
+  border: 1px solid #ddd;
+  margin-top: 25px;
+}
+
+.hizmet-buton .glyphicon-time {
+  margin-left: 7px;
+  margin-right: 1px;
+}
+
+.hizmet-buton {
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  position: relative;
+  font-size: 13px;
+  display: block;
+  color: #ffffff;
+}
+
+.hizmet-buton:hover {
+  background: rgba(17, 211, 187, 0.21);
+  border-bottom: 1px solid rgba(17, 211, 187, 0.21);
+}
+
+.hizmet-small {
+  font-size: 12px;
+  color: grey;
+  margin-left: 3px;
+  display: inline-block;
+}
+
+.hizmet-fiyat {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  padding: 6px 0;
+  background: #11D3BB;
+  color: white;
+  width: 100px;
+  border-radius: 3px;
+  text-align: center;
+}
+
+.hizmet-fiyat:hover {
+  color: white;
+  background: #11b5a1;
+}
+
+.hizmet-buton:last-child {
+  border-bottom: 0;
+}
+
+.detay {
+  font-size: 14px;
+}
+
+.devamini-goster {
+  display: block;
+  padding: 10px 0;
+  color: #11D3BB;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* Adjustment for ipad screens */
+
+@media(max-width: 1000px) {
+    .navbar-container {
+        padding: 0 1rem;
+    }
+
+    .navbar-container .nav-items {
+        gap: 0.1rem;
+    }
+
+    .navbar-container .nav-items .nav-link a, .navbar-container .nav-items .login-register .button {
+        font-size: 0.9rem;
+    }
+
+}
+
+/* adjustment for mobile phones */
+
+@media(max-width: 700px) {
+    .navbar-container .nav-items {
+        flex-direction: column;
+        position: fixed;
+        top: 70px;
+        width: 100vw;
+        background: rgb(35, 29, 53);
+        padding: 1rem 0;
+        height: 100vh;
+        z-index: 99;
+        right: -100%; 
+        transition: 0.2s ease-in;
+        -webkit-transition: 0.2s ease-in;
+        -moz-transition: 0.2s ease-in;
+        -ms-transition: 0.2s ease-in;
+        -o-transition: 0.2s ease-in;
+}
+
+.bars {
+    height: auto;
+    width: 22px;
+    cursor: pointer;
+}
+
+.bars .bar {
+    height: 2px;
+    width: 100%;
+    background: #fff;
+    margin: 4px;
+}
+
+.navbar-container .nav-items {
+    gap: 3rem;
+}
+
+.navbar-container .nav-items .login-register {
+    flex-direction: column;
+    gap: 2rem;
+    text-align: center;
+    width: 50%;
+}
+}
+
+
+
+.hizmet-icerik-kapsa {
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 1000;
+	overflow: hidden;
+	display: none;
+  }
+  
+  .cizgi {
+	border-bottom: 1px solid #ddd;
+	padding-top: 12px;
+	padding-bottom: 15px;
+  }
+  
+  .ops {
+		width: 152.5px !important;
+  }
+  
+  .opsiyonsuz {
+	  padding: 10px 10px 20px 10px;
+	  position: relative;
+	  border-bottom: 1px solid #ccc;
+  }
+  
+  .hizmet-icerik-icon {
+	width: 12px;
+	height: 21px;
+	vertical-align: bottom;
+	margin-top: -3px;
+	margin-right: 3px;
+  }
+  
+  .hizmet-icerik-img {
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	margin-top: 10px;
+	height: 220px;
+  }
+  
+  .hizmet-icerik-detay img {
+	height: 100px;
+	width: 120px;
+	margin-right: 11px;
+  }
+  
+  .fix-hizmet-menu {
+	position: fixed;
+	width: 430px;
+	top: 75px;
+	z-index: 40;
+  }
+  
+  .hizmet-icerik-detay,
+  .hizmet-icerik-yorum,
+  .hizmet-icerik-hakkinda,
+  .hizmet-icerik-degerlendirme {
+	padding: 15px;
+	background: #fff;
+	font-size: 14px;
+	border-bottom: 1px solid #ddd;
+  }
+  
+  .hizmet-icerik-yorum .hizmet-profil-yorum-item:last-of-type {
+	border: 0 !important;
+	padding-bottom: 0 !important;
+  }
+  
+  .hizmet-icerik-hakkinda iframe {
+	border: 0;
+	outline: 0;
+	margin-top: 7px;
+  }
+  
+  .hizmet-icerik-menu {
+	padding-left: 15px;
+	background: #F2F2F2;
+	margin-top: -10px;
+	margin-bottom: 5px;
+  }
+  
+  .hizmet-icerik-menu-link {
+	padding: 10px 4px;
+	display: inline-block;
+	margin-right: 15px;
+	font-size: 15px;
+	color: #757575;
+	font-weight: bold;
+  }
+  
+  .hizmet-icerik-menu-link:hover,
+  .hizmet-icerik-menu-link:focus,
+  .hizmet-icerik-menu-link:active {
+	color: #757575;
+	text-decoration: none
+  }
+  
+  .hizmet-icerik-menu-aktif {
+	color: #FF5C39 !important;
+  }
+  
+  .hizmet-icerik-menu-aktif:hover {
+	color: #FF5C39;
+  }
+  
+  .hizmet-icerik-yorum h3,
+  .hizmet-icerik-hakkinda h3,
+  .hizmet-icerik-degerlendirme h3 {
+	margin-top: 0;
+  }
+  
+  .hizmet-icerik-yorum small,
+  .hizmet-icerik-degerlendirme small {
+	font-size: 12px;
+  }
+  
+  .hizmet-icerik-degerlendirme .genel {
+	margin-top: 35px;
+	margin-bottom: 20px;
+  }
+  
+  .hizmet-icerik-degerlendirme .degerlendirme-sag {
+	margin-left: 52px;
+  }
+  
+  .hizmet-icerik-karart {
+	background: rgba(0, 0, 0, .5);
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	cursor: pointer;
+  }
+  
+  .hizmet-icerik {
+	width: 767px;
+	height: 96vh;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: calc(-767px / 2);
+	margin-top: calc(-95vh / 2);
+	background: #f2f2f2;
+	overflow: auto;
+	z-index: 1002;
+  }
+  
+  .hizmet-icerik-ana-baslik {
+	position: fixed;
+	margin-top: -20px !important;
+	background: #f2f2f2;
+	margin-left: -18px;
+	padding-left: 18px;
+	padding-top: 20px;
+	width: 433px;
+	padding-bottom: 10px;
+	z-index: 1000;
+  }
+  
+  .hizmet-icerik-sol {
+	width: 430px;
+	float: left;
+  }
+  
+  .hizmet-icerik-link {
+	font-size: 15px;
+	color: #333;
+	margin-bottom: 1px;
+	display: inline-block;
+	margin-top: 31px;
+  }
+  
+  .hizmet-icerik-ust {
+	padding: 15px;
+	position: relative;
+  }
+  
+  .hizmet-icerik-sag {
+	width: 320px;
+	float: left;
+	padding: 20px 10px;
+  }
+  
+  .hizmet-tab {
+	position: fixed;
+	width: 307px;
+	background: #fff;
+	border: 1px solid #ddd;
+	height: 350px;
+	overflow: auto;
+  }
+  
+  .tab-menu-icerik {
+	padding: 10px;
+  }
+  
+  .hizmet-tab .cbox-item {
+	padding: 10px 5px;
+	border-bottom: 1px solid #ddd;
+  }
+  
+  .hizmet-tab .cbox-time {
+	margin-top: 8px;
+	display: inline-block;
+	font-weight: bold;
+	color: grey;
+  }
+  
+  .hizmet-tab .cbox-fiyat {
+	margin-top: 8px;
+	display: inline-block;
+	position: absolute;
+	right: 15px;
+	font-weight: bold;
+  }
+  
+  .tab-menu-baslik {
+	padding: 15px 0;
+	text-align: center;
+	width: 144px;
+	float: left;
+	font-weight: bold;
+	color: #626062;
+	cursor: pointer;
+	background: #f3f3f3;
+  }
+  
+  .hizmet-icerik-rezerve {
+	color: white;
+	font-weight: bold;
+	text-transform: uppercase;
+	padding: 13px 0;
+	text-align: center;
+	width: 306px;
+	background: #11D3BB;
+	display: block;
+	font-size: 16px;
+	margin: 20px 0;
+	border-radius: 3px;
+	border-bottom: 1px solid #11c1ab;
+	position: fixed;
+	top: 400px;
+  }
+  
+  .hizmet-icerik-rezerve:hover {
+	background: #11c1ab;
+	color: white;
+  }
+  
+  .tab-menu-baslik.aktif {
+	background: #fff;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  

@@ -60,8 +60,7 @@ const QRSchema = new mongoose.Schema({
 const question = mongoose.model('question', QRSchema);
   
 
-  
-
+ 
 
 
 // Middleware
@@ -143,6 +142,10 @@ app.get('/conversations', isLoggedIn, function(req, res) {
 	});
 });
 
+app.get('/popup', isLoggedIn, (req, res) => {
+	res.render("popup", { title: "popup" });
+  });
+
 
 app.get('/questions', isLoggedIn, function(req, res) {
 	question.find({}).then(function(questions) {
@@ -151,6 +154,19 @@ app.get('/questions', isLoggedIn, function(req, res) {
 	  console.log(error);
 	  res.status(500).send('Internal Server Error');
 	});
+  });
+  
+  app.get('/tags/:id', isLoggedIn, function(req, res) {
+	const intentId = req.params.id;
+  
+	question.findById(intentId)
+	  .then(intent => {
+		res.render('tags', { title: "Tags", patterns: intent.intents[0].patterns, responses: intent.intents[0].responses });
+	  })
+	  .catch(error => {
+		console.error('Error occurred:', error);
+		res.sendStatus(500);
+	  });
   });
   
   

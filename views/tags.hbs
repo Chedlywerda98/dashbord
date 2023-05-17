@@ -1,0 +1,40 @@
+<div>
+  <h3>Patterns:</h3>
+  <ul id="patterns">
+    {{#each patterns}}
+      <li class="note">{{this}}, <button class="delete-btn" onclick="deleteConv('{{this._id}}')">Delete</button></li>
+    {{/each}}
+  </ul>
+</div>
+
+<div>
+  <h3>Responses:</h3>
+  <ul id="responses">
+    {{#each responses}}
+      <li class="note" >{{this}}, <button class="delete-btn" onclick="deleteConv('{{this._id}}')">Delete</button></li>
+    {{/each}}
+  </ul>
+</div>
+
+
+<style>
+	.note {
+		background-color: #f2f2f2;
+		padding: 20px;
+		margin-bottom: 20px;
+	}
+
+    .delete-btn {
+        background-color: #f44336;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+</style>
