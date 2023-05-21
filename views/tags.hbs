@@ -5,10 +5,12 @@
       <li class="note">
         {{this}},
         <button class="delete-btn" onclick="deletePatt('{{../intentId}}', '{{this}}')">Delete</button>
-        <button class="add-btn" onclick="deleteConv('{{this._id}}')">Add</button>
-        <button class="update-btn" onclick="deleteConv('{{this._id}}')">Update</button>
       </li>
     {{/each}}
+    <li class="note">
+      <input type="text" id="newPatternInput">
+      <button class="add-btn" onclick="addPattern('{{../intentId}}')">Add</button>
+    </li>
   </ul>
 </div>
 
@@ -19,10 +21,12 @@
       <li class="note">
         {{this}},
         <button class="delete-btn" onclick="deleteResp('{{../intentId}}', '{{this}}')">Delete</button>
-        <button class="add-btn" onclick="deleteConv('{{this._id}}')">Add</button>
-        <button class="update-btn" onclick="deleteConv('{{this._id}}')">Update</button>
       </li>
     {{/each}}
+    <li class="note">
+      <input type="text" id="newResponseInput">
+      <button class="add-btn" onclick="addResponse('{{../intentId}}')">Add</button>
+    </li>
   </ul>
 </div>
 
@@ -124,5 +128,57 @@ function deleteResp(intentId, responseId) {
       });
   }
 }
+
+function addPattern(intentId) {
+  const newPatternInput = document.getElementById('newPatternInput');
+  const newPattern = newPatternInput.value.trim();
+  
+  if (newPattern) {
+    fetch(`/tags/${intentId}/patterns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ pattern: newPattern })
+    })
+      .then(response => {
+        if (response.ok) {
+          location.reload(); 
+        } else {
+          alert("Failed to add the pattern.");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while adding the pattern.");
+      });
+  }
+}
+
+
+function addResponse(intentId) {
+  const newResponse = document.getElementById('newResponseInput').value;
+
+  fetch(`/tags/${intentId}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ response: newResponse }),
+  })
+    .then(response => {
+      if (response.ok) {
+        location.reload(); 
+      } else {
+        alert('Failed to add the response.');
+      }
+    })
+    .catch(error => {
+      console.error(error);
+      alert('An error occurred while adding the response.');
+    });
+}
+
+
 </script>
 

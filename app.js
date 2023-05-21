@@ -153,14 +153,14 @@ app.post('/questions', isLoggedIn, function (req, res) {
     const newQuestion = new question({
         intents: [{
             tag: tag,
-            patterns: patterns.split("\n"),  // Split patterns by newline into an array
-            responses: responses.split("\n")  // Split responses by newline into an array
+            patterns: patterns.split("\n"),  
+            responses: responses.split("\n")  
         }]
     });
 
     newQuestion.save()
         .then(() => {
-            res.redirect('/questions');  // Redirect to the questions page after saving
+            res.redirect('/questions');  
         })
         .catch(error => {
             console.log(error);
@@ -217,6 +217,35 @@ router.delete('/conversations/:id', async (req, res) => {
 		res.status(500).send(error);
 	}
 });
+
+app.post('/tags/:id', isLoggedIn, async (req, res) => {
+	const intentId = req.params.id;
+	const { pattern, response } = req.body;
+  
+	try {
+	  const intent = await question.findById(intentId);
+  
+	  if (!intent) {
+		return res.status(404).send();
+	  }
+  
+	  if (pattern) {
+		intent.intents[0].patterns.push(pattern);
+	  }
+  
+	  if (response) {
+		intent.intents[0].responses.push(response);
+	  }
+  
+	  await intent.save();
+  
+	  res.send(intent);
+	} catch (error) {
+	  res.status(500).send(error);
+	}
+  });
+  
+  
 
 // Delete pattern
 router.delete('/tags/:id/patterns/:patternId', async (req, res) => {
