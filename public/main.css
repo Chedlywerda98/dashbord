@@ -190,6 +190,12 @@ ul {
 
 a {
     text-decoration: none;
+	color: #ffffff;
+}
+
+b {
+    text-decoration: none;
+	color: #02192b;
 }
 
 .navbar-container {

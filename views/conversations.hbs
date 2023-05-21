@@ -15,7 +15,19 @@
 	}
 
     .delete-btn {
-        background-color: #f44336;
+        background-color: #8a3832;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+	.add-btnn {
+        background-color: #48ae9c;
         border: none;
         color: white;
         padding: 5px 10px;
@@ -52,7 +64,8 @@
 			<li class="note">
 				<span class="user">{{this.user_input}}</span>
 				<span class="bot">{{this.bot_response}}</span>         
-                <button class="delete-btn" onclick="deleteConv('{{this._id}}')">Delete</button>
+                <button class="delete-btn" onclick="deleteConv('{{this._id}}')"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a></button>
+				<button class="add-btnn"> <a href="NewQuestion"><span>Add New</span></a></button>
 			</li>
 
 		{{/each}}

@@ -13,6 +13,39 @@
 </navbar>
 
 
+<div class="hizmet-kart-icerik">
+  <div class="buton-kapsa">
+    
+    {{#each questions}}
+      <li class="hizmet-buton">
+        <div onclick="openWindow('{{this._id}}')">
+          {{#each this.intents}}
+            <h2>Tag: {{this.tag}}</h2>
+          {{/each}}
+        </div>
+        <button class="delete-btn" onclick="confirmDelete('{{this._id}}')">
+        <span>Delete</span>
+        </button>
+      </li>
+    {{/each}}
+  </div>
+</div>
+
+<button class="add-btn"> <b href="NewQuestion">Add New Tag</b></button>
+
+<script>
+  function openWindow(intentId) {
+    const url = `/tags/${intentId}`;
+    window.open(url, 'myWindow', 'width=700,height=500');
+  }
+    function confirmDelete(intentId) {
+    if (confirm('Are you sure you want to delete this tag?')) {
+      window.location.href = '/questions/' + intentId + '/delete';
+    }
+  }
+</script>
+
+
   <style>
 	.note {
 		background-color: #f2f2f2;
@@ -29,29 +62,33 @@
 		color: #666;
 	}
 
+.add-btn {
+        background-color: none;
+        border: none;
+        color: rgb(12, 41, 67);
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
+.delete-btn {
+        background-color: #8a3832;
+        border: none;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
+
 </style>
-
-
-<div class="hizmet-kart-icerik">
-  <div class="buton-kapsa">
-    {{#each questions}}
-      <li class="hizmet-buton">
-        <div onclick="openWindow('{{this._id}}')">
-          {{#each this.intents}}
-            <h2>Tag: {{this.tag}}</h2>
-          {{/each}}
-        </div>
-      </li>
-    {{/each}}
-  </div>
-</div>
-
-<script>
-  function openWindow(intentId) {
-    const url = `/tags/${intentId}`;
-    window.open(url, 'myWindow', 'width=500,height=500');
-  }
-</script>
 
 
 
