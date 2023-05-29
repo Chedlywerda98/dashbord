@@ -1,41 +1,156 @@
+
 <div>
   <h3 class="h3">Patterns:</h3>
   <ul id="patterns">
     {{#each patterns}}
       <li class="note">
         {{this}},
-        <button class="delete-btn" onclick="deletePatt('{{../intentId}}', '{{this}}')">Delete</button>
+      <button class="delete-btn" onclick="deletePatt('{{@root.tagId}}', '{{this}}')">Delete</button>
       </li>
     {{/each}}
     <li class="note">
       <input type="text" id="newPatternInput">
-      <button class="add-btn" onclick="addPattern('{{../intentId}}')">Add</button>
+<button class="add-btn" onclick="addPattern('{{@root.tagId}}')">Add</button>
     </li>
   </ul>
 </div>
 
-<div>
+<div> 
   <h3 class="h3">Responses:</h3>
   <ul id="responses">
     {{#each responses}}
       <li class="note">
         {{this}},
-        <button class="delete-btn" onclick="deleteResp('{{../intentId}}', '{{this}}')">Delete</button>
+      <button class="delete-btn" onclick="deleteResp('{{@root.tagId}}', '{{this}}')">Delete</button>
       </li>
     {{/each}}
     <li class="note">
       <input type="text" id="newResponseInput">
-      <button class="add-btn" onclick="addResponse('{{../intentId}}')">Add</button>
+      <button class="add-btn" onclick="addResponse('{{@root.tagId}}')">Add</button>
     </li>
   </ul>
 </div>
 
 
 
+<script>
+
+function deletePatt(intentId, patternId) {
+  console.log(intentId);
+  if (confirm("Are you sure you want to delete this pattern?")) {
+    fetch(`/tags/${encodeURIComponent(intentId)}/patterns/${encodeURIComponent(patternId)}`, { method: 'DELETE' })
+      .then(response => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert("Failed to delete the pattern.");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while deleting the pattern.");
+      });
+  }
+}
+
+function deleteResp(intentId, responseId) {
+  console.log(intentId);
+  if (confirm("Are you sure you want to delete this response?")) {
+    fetch(`/tags/${encodeURIComponent(intentId)}/responses/${encodeURIComponent(responseId)}`, { method: 'DELETE' })
+      .then(response => {
+        if (response.ok) {
+          location.reload();
+        } else {
+          alert("Failed to delete the response.");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while deleting the response.");
+      });
+  }
+}
+
+function addPattern(intentId) {
+  console.log("addPattern function called with intentId:", intentId);
+
+  const newPatternInput = document.getElementById('newPatternInput');
+  const pattern = newPatternInput.value.trim();
+
+  console.log("Pattern:", pattern);
+
+  if (pattern) {
+    fetch(`/tags/${encodeURIComponent(intentId)}/patterns`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ pattern })
+    })
+      .then(response => {
+        console.log("Response:", response);
+        if (response.ok) {
+          newPatternInput.value = ''; // Clear the input field
+          location.reload();
+        } else {
+          alert("Failed to add the pattern.");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while adding the pattern.");
+      });
+  } else {
+    alert("Please enter a pattern.");
+  }
+}
+
+
+
+function addResponse(intentId) {
+  console.log("addResponse function called with intentId:", intentId);
+
+  const newResponseInput = document.getElementById('newResponseInput');
+  const response = newResponseInput.value.trim();
+
+  console.log("Response:", response);
+
+  if (response) {
+    fetch(`/tags/${encodeURIComponent(intentId)}/responses`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ response })
+    })
+      .then(response => {
+        console.log("Response:", response);
+        if (response.ok) {
+          newResponseInput.value = ''; // Clear the input field
+          location.reload();
+        } else {
+          alert("Failed to add the response.");
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        alert("An error occurred while adding the response.");
+      });
+  } else {
+    alert("Please enter a response.");
+  }
+}
+
+
+</script>
+
+
+
 <style>
 	.note {
-		background-color: #f2f2f2;
-		padding: 20px;
+		background-color: #b3eaee;
+		padding: 15px;
+    margin : 50px;
 		margin-bottom: 20px;
 	}
 
@@ -91,94 +206,3 @@
 }
 
 </style>
-
-
-
-<script>
-function deletePatt(intentId, patternId) {
-  if (confirm("Are you sure you want to delete this pattern?")) {
-    fetch(`/tags/${intentId}/${encodeURIComponent(patternId)}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.ok) {
-          location.reload(); 
-        } else {
-          alert("Failed to delete the pattern.");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while deleting the pattern.");
-      });
-  }
-}
-
-function deleteResp(intentId, responseId) {
-  if (confirm("Are you sure you want to delete this response?")) {
-    fetch(`/tags/${intentId}/${encodeURIComponent(responseId)}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.ok) {
-          location.reload(); 
-        } else {
-          alert("Failed to delete the response.");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while deleting the response.");
-      });
-  }
-}
-
-function addPattern(intentId) {
-  const newPatternInput = document.getElementById('newPatternInput');
-  const newPattern = newPatternInput.value.trim();
-  
-  if (newPattern) {
-    fetch(`/tags/${intentId}/patterns`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ pattern: newPattern })
-    })
-      .then(response => {
-        if (response.ok) {
-          location.reload(); 
-        } else {
-          alert("Failed to add the pattern.");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while adding the pattern.");
-      });
-  }
-}
-
-
-function addResponse(intentId) {
-  const newResponse = document.getElementById('newResponseInput').value;
-
-  fetch(`/tags/${intentId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ response: newResponse }),
-  })
-    .then(response => {
-      if (response.ok) {
-        location.reload(); 
-      } else {
-        alert('Failed to add the response.');
-      }
-    })
-    .catch(error => {
-      console.error(error);
-      alert('An error occurred while adding the response.');
-    });
-}
-
-
-</script>
-

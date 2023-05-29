@@ -5,9 +5,9 @@ const mongoose = require('mongoose');
 const passport = require('passport');
 const localStrategy = require('passport-local').Strategy;
 const bcrypt = require('bcrypt');
-
 const app = express();
 const router = express.Router();
+
 
 mongoose.connect("mongodb+srv://chedlywerda:oIDqDC7FfNABYLlV@cluster0.fjsrksp.mongodb.net/ChatBot", {
 	useNewUrlParser: true,
@@ -32,9 +32,9 @@ const users = mongoose.model('Users', {
 		required: true
 	},
 	password: {
-		type: String,
+		type: String, 
 		required: true
-	}
+	} 
 });
 
 const conversationSchema = new mongoose.Schema({
@@ -45,7 +45,7 @@ const conversationSchema = new mongoose.Schema({
 const Conversation = mongoose.model('Conversation', conversationSchema);
 
 const QRSchema = new mongoose.Schema({
-	intents: [{
+	intents: [{ 
 		tag: { type: String, required: true },
 		patterns: { type: [String], required: true },
 		responses: { type: [String], required: true }
@@ -53,14 +53,14 @@ const QRSchema = new mongoose.Schema({
 }, { collection: 'QR' });
 
 const question = mongoose.model('question', QRSchema);
-
-// Middleware
+ 
+// Middleware 
 app.engine('hbs', hbs({
 	extname: '.hbs',
 	runtimeOptions: {
 		allowProtoPropertiesByDefault: true,
-	}
-}));
+	}  
+})); 
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/public'));
 app.use(session({
@@ -140,7 +140,7 @@ app.get('/questions', isLoggedIn, function (req, res) {
 		console.log(error);
 		res.status(500).send('Internal Server Error');
 	});
-});
+}); 
 
 
 app.get('/NewQuestion', isLoggedIn, function (req, res) {
@@ -168,19 +168,48 @@ app.post('/questions', isLoggedIn, function (req, res) {
         });
 });
 
+ 
 
-app.get('/tags/:id', isLoggedIn, function (req, res) {
-	const intentId = req.params.id;
+app.get('/tags/:id', isLoggedIn, async (req, res) => {
+	const questionId = req.params.id;
+  
+	// Validate the questionId as a valid ObjectId
+	if (!mongoose.Types.ObjectId.isValid(questionId)) {
+	  console.error('Invalid question ID:', questionId);
+	  res.sendStatus(400);
+	  return;
+	}
+  
+	console.log('Received question ID:', questionId);
+  
+	try {
+	  const foundQuestion = await question.findById(questionId).lean();
+  
+	  if (!foundQuestion) {
+		console.error('Question not found for _id:', questionId);
+		res.sendStatus(404);
+		return;
+	  }
+  
+	  console.log('Found question:', foundQuestion);
+  
+	  res.render('tags', {
+		title: "Tags",
+		patterns: foundQuestion.intents[0].patterns,
+		responses: foundQuestion.intents[0].responses,
+		tagId: questionId
 
-	question.findById(intentId)
-		.then(intent => {
-			res.render('tags', { title: "Tags", patterns: intent.intents[0].patterns, responses: intent.intents[0].responses });
-		})
-		.catch(error => {
-			console.error('Error occurred:', error);
-			res.sendStatus(500);
-		});
-});
+	  });
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	  res.sendStatus(500);
+	}
+  });
+  
+  
+
+  
+  
 
 app.get('/login', isLoggedOut, (req, res) => {
 	const response = {
@@ -218,74 +247,8 @@ router.delete('/conversations/:id', async (req, res) => {
 	}
 });
 
-app.post('/tags/:id', isLoggedIn, async (req, res) => {
-	const intentId = req.params.id;
-	const { pattern, response } = req.body;
-  
-	try {
-	  const intent = await question.findById(intentId);
-  
-	  if (!intent) {
-		return res.status(404).send();
-	  }
-  
-	  if (pattern) {
-		intent.intents[0].patterns.push(pattern);
-	  }
-  
-	  if (response) {
-		intent.intents[0].responses.push(response);
-	  }
-  
-	  await intent.save();
-  
-	  res.send(intent);
-	} catch (error) {
-	  res.status(500).send(error);
-	}
-  });
-  
-  
 
-// Delete pattern
-router.delete('/tags/:id/patterns/:patternId', async (req, res) => {
-	try {
-		const intentId = req.params.id;
-		const patternId = req.params.patternId;
-		const intent = await question.findById(intentId);
-
-		if (!intent) {
-			return res.status(404).send();
-		}
-
-		intent.intents[0].patterns = intent.intents[0].patterns.filter(pattern => pattern !== patternId);
-		await intent.save();
-
-		res.send(intent);
-	} catch (error) {
-		res.status(500).send(error);
-	}
-});
-
-// Delete response
-router.delete('/tags/:id/responses/:responseId', async (req, res) => {
-	try {
-		const intentId = req.params.id;
-		const responseId = req.params.responseId;
-		const intent = await question.findById(intentId);
-
-		if (!intent) {
-			return res.status(404).send();
-		}
-
-		intent.intents[0].responses = intent.intents[0].responses.filter(response => response !== responseId);
-		await intent.save();
-
-		res.send(intent);
-	} catch (error) {
-		res.status(500).send(error);
-	}
-});
+  
 
 // Delete Tag
 app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
@@ -293,18 +256,171 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
   
 	question.findByIdAndRemove(intentId)
 	  .then(() => {
-		res.redirect('/questions'); 
+		res.redirect('/questions');  
 	  })
 	  .catch(error => {
 		console.log(error);
 		res.status(500).send('Internal Server Error');
 	  });
   });
+   
+  app.delete('/tags/:id/patterns/:p', isLoggedIn, async (req, res) => {
+	const tagId = req.params.id;
+	const pattern = req.params.p;
   
+	// Validate the questionId as a valid ObjectId
+	if (!mongoose.Types.ObjectId.isValid(tagId)) {
+	  console.error('Invalid question ID:', tagId);
+	  res.sendStatus(400);
+	  return;
+	}
   
+	console.log('Received question ID:', tagId);
+  
+	try {
+	  const foundQuestion = await question.findById(tagId);
+  
+	  if (!foundQuestion) {
+		console.error('Question not found for _id:', tagId);
+		res.sendStatus(404);
+		return;
+	  }
+  
+	  // Remove the pattern at the given index
+	  const index = foundQuestion.intents[0].patterns.findIndex(el => el == pattern);
+	  if (index != -1 )
+	  foundQuestion.intents[0].patterns.splice(index, 1);
+  
+	  // Save the updated question
+	  await foundQuestion.save();
+  
+	  res.sendStatus(200);
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	  res.sendStatus(500);
+	}
+  });
 
+  app.delete('/tags/:id/responses/:r', isLoggedIn, async (req, res) => {
+	const tagId = req.params.id;
+	const response = req.params.r;
+  
+	// Validate the tagId as a valid ObjectId
+	if (!mongoose.Types.ObjectId.isValid(tagId)) {
+	  console.error('Invalid tag ID:', tagId);
+	  res.sendStatus(400);
+	  return;
+	}
+  
+	console.log('Received tag ID:', tagId);
+  
+	try {
+	  const foundQuestion = await question.findById(tagId);
+  
+	  if (!foundQuestion) {
+		console.error('Tag not found for _id:', tagId);
+		res.sendStatus(404);
+		return;
+	  }
+  
+	  // Remove the response at the given index
+	  const index = foundQuestion.intents[0].responses.findIndex(el => el == response);
+	  if (index != -1)
+	  foundQuestion.intents[0].responses.splice(index, 1);
+  
+	  // Save the updated tag
+	  await foundQuestion.save();
+  
+	  res.sendStatus(200);
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	  res.sendStatus(500);
+	}
+  });
+    
+
+  app.post('/tags/:id/patterns', isLoggedIn, async (req, res) => {
+	const tagId = req.params.id;
+	const pattern = req.body.pattern;
+  
+	// Validate the tagId as a valid ObjectId
+	if (!mongoose.Types.ObjectId.isValid(tagId)) {
+	  console.error('Invalid tag ID:', tagId);
+	  return res.sendStatus(400);
+	}
+  
+	console.log('Received tag ID:', tagId);
+  
+	try {
+	  const foundQuestion = await question.findById(tagId);
+  
+	  if (!foundQuestion) {
+		console.error('Tag not found for _id:', tagId);
+		return res.sendStatus(404);
+	  }
+  
+	  // Initialize patterns array if it doesn't exist
+	  if (!foundQuestion.patterns) {
+		foundQuestion.patterns = [];
+	  }
+  
+	  // Add the new pattern
+	  foundQuestion.intents[0].patterns.push(pattern);
+  
+  
+	  // Save the updated tag
+	  await foundQuestion.save();
+  
+	  res.sendStatus(200);
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	  res.sendStatus(500);
+	}
+  });
+
+  app.post('/tags/:id/responses', isLoggedIn, async (req, res) => {
+	const tagId = req.params.id;
+	const response = req.body.response;
+  
+	// Validate the tagId as a valid ObjectId
+	if (!mongoose.Types.ObjectId.isValid(tagId)) {
+	  console.error('Invalid tag ID:', tagId);
+	  return res.sendStatus(400);
+	}
+  
+	console.log('Received tag ID:', tagId);
+  
+	try {
+	  const foundQuestion = await question.findById(tagId);
+  
+	  if (!foundQuestion) {
+		console.error('Tag not found for _id:', tagId);
+		return res.sendStatus(404);
+	  }
+  
+	  // Initialize responses array if it doesn't exist
+	  if (!foundQuestion.responses) {
+		foundQuestion.responses = [];
+	  }
+  
+	  // Add the new response
+	  foundQuestion.intents[0].responses.push(response);
+  
+	  // Save the updated tag
+	  await foundQuestion.save();
+  
+	  res.sendStatus(200);
+	} catch (error) {
+	  console.error('Error occurred:', error);
+	  res.sendStatus(500);
+	}
+  });
+  
+   
 app.use('/', router);
+
 
 app.listen(3000, () => {
 	console.log("Listening on port 3000");
 });
+  
