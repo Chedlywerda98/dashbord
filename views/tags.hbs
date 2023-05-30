@@ -1,16 +1,15 @@
-
 <div>
   <h3 class="h3">Patterns:</h3>
   <ul id="patterns">
     {{#each patterns}}
       <li class="note">
         {{this}},
-      <button class="delete-btn" onclick="deletePatt('{{@root.tagId}}', '{{this}}')">Delete</button>
+        <button class="delete-btn" onclick="deletePatt('{{@root.tagId}}', '{{this}}')">Delete</button>
       </li>
     {{/each}}
     <li class="note">
       <input type="text" id="newPatternInput">
-<button class="add-btn" onclick="addPattern('{{@root.tagId}}')">Add</button>
+      <button class="add-btn" onclick="addPattern('{{@root.tagId}}')">Add</button>
     </li>
   </ul>
 </div>
@@ -21,7 +20,7 @@
     {{#each responses}}
       <li class="note">
         {{this}},
-      <button class="delete-btn" onclick="deleteResp('{{@root.tagId}}', '{{this}}')">Delete</button>
+        <button class="delete-btn" onclick="deleteResp('{{@root.tagId}}', '{{this}}')">Delete</button>
       </li>
     {{/each}}
     <li class="note">
@@ -31,178 +30,166 @@
   </ul>
 </div>
 
-
-
 <script>
-
-function deletePatt(intentId, patternId) {
-  console.log(intentId);
-  if (confirm("Are you sure you want to delete this pattern?")) {
-    fetch(`/tags/${encodeURIComponent(intentId)}/patterns/${encodeURIComponent(patternId)}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.ok) {
-          location.reload();
-        } else {
-          alert("Failed to delete the pattern.");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while deleting the pattern.");
-      });
+  function deletePatt(intentId, patternId) {
+    console.log(intentId);
+    if (confirm("Are you sure you want to delete this pattern?")) {
+      fetch(`/tags/${encodeURIComponent(intentId)}/patterns/${encodeURIComponent(patternId)}`, { method: 'DELETE' })
+        .then(response => {
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert("Failed to delete the pattern.");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("An error occurred while deleting the pattern.");
+        });
+    }
   }
-}
 
-function deleteResp(intentId, responseId) {
-  console.log(intentId);
-  if (confirm("Are you sure you want to delete this response?")) {
-    fetch(`/tags/${encodeURIComponent(intentId)}/responses/${encodeURIComponent(responseId)}`, { method: 'DELETE' })
-      .then(response => {
-        if (response.ok) {
-          location.reload();
-        } else {
-          alert("Failed to delete the response.");
-        }
-      })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while deleting the response.");
-      });
+  function deleteResp(intentId, responseId) {
+    console.log(intentId);
+    if (confirm("Are you sure you want to delete this response?")) {
+      fetch(`/tags/${encodeURIComponent(intentId)}/responses/${encodeURIComponent(responseId)}`, { method: 'DELETE' })
+        .then(response => {
+          if (response.ok) {
+            location.reload();
+          } else {
+            alert("Failed to delete the response.");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("An error occurred while deleting the response.");
+        });
+    }
   }
-}
 
-function addPattern(intentId) {
-  console.log("addPattern function called with intentId:", intentId);
+  function addPattern(intentId) {
+    console.log("addPattern function called with intentId:", intentId);
 
-  const newPatternInput = document.getElementById('newPatternInput');
-  const pattern = newPatternInput.value.trim();
+    const newPatternInput = document.getElementById('newPatternInput');
+    const pattern = newPatternInput.value.trim();
 
-  console.log("Pattern:", pattern);
+    console.log("Pattern:", pattern);
 
-  if (pattern) {
-    fetch(`/tags/${encodeURIComponent(intentId)}/patterns`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ pattern })
-    })
-      .then(response => {
-        console.log("Response:", response);
-        if (response.ok) {
-          newPatternInput.value = ''; // Clear the input field
-          location.reload();
-        } else {
-          alert("Failed to add the pattern.");
-        }
+    if (pattern) {
+      fetch(`/tags/${encodeURIComponent(intentId)}/patterns`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ pattern })
       })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while adding the pattern.");
-      });
-  } else {
-    alert("Please enter a pattern.");
+        .then(response => {
+          console.log("Response:", response);
+          if (response.ok) {
+            newPatternInput.value = ''; // Clear the input field
+            location.reload();
+          } else {
+            alert("Failed to add the pattern.");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("An error occurred while adding the pattern.");
+        });
+    } else {
+      alert("Please enter a pattern.");
+    }
   }
-}
 
+  function addResponse(intentId) {
+    console.log("addResponse function called with intentId:", intentId);
 
+    const newResponseInput = document.getElementById('newResponseInput');
+    const response = newResponseInput.value.trim();
 
-function addResponse(intentId) {
-  console.log("addResponse function called with intentId:", intentId);
+    console.log("Response:", response);
 
-  const newResponseInput = document.getElementById('newResponseInput');
-  const response = newResponseInput.value.trim();
-
-  console.log("Response:", response);
-
-  if (response) {
-    fetch(`/tags/${encodeURIComponent(intentId)}/responses`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ response })
-    })
-      .then(response => {
-        console.log("Response:", response);
-        if (response.ok) {
-          newResponseInput.value = ''; // Clear the input field
-          location.reload();
-        } else {
-          alert("Failed to add the response.");
-        }
+    if (response) {
+      fetch(`/tags/${encodeURIComponent(intentId)}/responses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ response })
       })
-      .catch(error => {
-        console.error(error);
-        alert("An error occurred while adding the response.");
-      });
-  } else {
-    alert("Please enter a response.");
+        .then(response => {
+          console.log("Response:", response);
+          if (response.ok) {
+            newResponseInput.value = ''; // Clear the input field
+            location.reload();
+          } else {
+            alert("Failed to add the response.");
+          }
+        })
+        .catch(error => {
+          console.error(error);
+          alert("An error occurred while adding the response.");
+        });
+    } else {
+      alert("Please enter a response.");
+    }
   }
-}
-
-
 </script>
 
-
-
 <style>
-	.note {
-		background-color: #b3eaee;
-		padding: 15px;
-    margin : 50px;
-		margin-bottom: 20px;
-	}
+  .note {
+    background-color: #b0f5fa;
+    padding: 15px;
+    margin: 50px;
+    margin-bottom: 20px;
+  }
 
-    .h3 {
-       color: white; 
-       font-size: 14px;
-        margin-left: 10px;
-    }
+  .h3 {
+    color: white;
+    font-size: 14px;
+    margin-left: 10px;
+  }
 
-    .delete-btn {
-        background-color: #f44336;
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin-left: 10px;
-        cursor: pointer;
-    }
+  .delete-btn {
+    background-color: #f44336;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
 
-    .add-btn {
-        background-color: #3c74b8;
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin-left: 10px;
-        cursor: pointer;
-    }
+  .add-btn {
+    background-color: #3c74b8;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
 
-    .update-btn {
-        background-color: #58dea4;
-        border: none;
-        color: white;
-        padding: 5px 10px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 14px;
-        margin-left: 10px;
-        cursor: pointer;
-    }
+  .update-btn {
+    background-color: #58dea4;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 10px;
+    cursor: pointer;
+  }
 
-     body {
-    
-	background-image: url('https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1517&q=80');
-
-}
-
+  body {
+    background-image: url('https://images.unsplash.com/photo-1485470733090-0aae1788d5af?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1517&q=80');
+  }
 </style>

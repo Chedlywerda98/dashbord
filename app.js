@@ -148,27 +148,26 @@ app.get('/NewQuestion', isLoggedIn, function (req, res) {
 });
 
 app.post('/questions', isLoggedIn, function (req, res) {
-    const { tag, patterns, responses } = req.body;
-
-    const newQuestion = new question({
-        intents: [{
-            tag: tag,
-            patterns: patterns.split("\n"),  
-            responses: responses.split("\n")  
-        }]
-    });
-
-    newQuestion.save()
-        .then(() => {
-            res.redirect('/questions');  
-        })
-        .catch(error => {
-            console.log(error);
-            res.status(500).send('Internal Server Error');
-        });
-});
-
- 
+	const { tag, patterns, responses } = req.body;
+  
+	const newQuestion = new question({
+	  intents: [{
+		tag: tag,
+		patterns: patterns.split("\n").map((pattern) => pattern.trim()), 
+		responses: responses.split("\n").map((response) => response.trim()) 
+	  }]
+	});
+  
+	newQuestion.save()
+	  .then(() => {
+		res.redirect('/questions');
+	  })
+	  .catch(error => {
+		console.log(error);
+		res.status(500).send('Internal Server Error');
+	  });
+  });
+  
 
 app.get('/tags/:id', isLoggedIn, async (req, res) => {
 	const questionId = req.params.id;
@@ -205,10 +204,6 @@ app.get('/tags/:id', isLoggedIn, async (req, res) => {
 	  res.sendStatus(500);
 	}
   });
-  
-  
-
-  
   
 
 app.get('/login', isLoggedOut, (req, res) => {
@@ -248,8 +243,6 @@ router.delete('/conversations/:id', async (req, res) => {
 });
 
 
-  
-
 // Delete Tag
 app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 	const intentId = req.params.id;
@@ -268,7 +261,6 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 	const tagId = req.params.id;
 	const pattern = req.params.p;
   
-	// Validate the questionId as a valid ObjectId
 	if (!mongoose.Types.ObjectId.isValid(tagId)) {
 	  console.error('Invalid question ID:', tagId);
 	  res.sendStatus(400);
@@ -286,12 +278,11 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 		return;
 	  }
   
-	  // Remove the pattern at the given index
 	  const index = foundQuestion.intents[0].patterns.findIndex(el => el == pattern);
 	  if (index != -1 )
 	  foundQuestion.intents[0].patterns.splice(index, 1);
   
-	  // Save the updated question
+
 	  await foundQuestion.save();
   
 	  res.sendStatus(200);
@@ -305,7 +296,7 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 	const tagId = req.params.id;
 	const response = req.params.r;
   
-	// Validate the tagId as a valid ObjectId
+	
 	if (!mongoose.Types.ObjectId.isValid(tagId)) {
 	  console.error('Invalid tag ID:', tagId);
 	  res.sendStatus(400);
@@ -323,7 +314,7 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 		return;
 	  }
   
-	  // Remove the response at the given index
+	 
 	  const index = foundQuestion.intents[0].responses.findIndex(el => el == response);
 	  if (index != -1)
 	  foundQuestion.intents[0].responses.splice(index, 1);
@@ -343,7 +334,7 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 	const tagId = req.params.id;
 	const pattern = req.body.pattern;
   
-	// Validate the tagId as a valid ObjectId
+	
 	if (!mongoose.Types.ObjectId.isValid(tagId)) {
 	  console.error('Invalid tag ID:', tagId);
 	  return res.sendStatus(400);
@@ -364,11 +355,8 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 		foundQuestion.patterns = [];
 	  }
   
-	  // Add the new pattern
 	  foundQuestion.intents[0].patterns.push(pattern);
   
-  
-	  // Save the updated tag
 	  await foundQuestion.save();
   
 	  res.sendStatus(200);
@@ -382,7 +370,6 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 	const tagId = req.params.id;
 	const response = req.body.response;
   
-	// Validate the tagId as a valid ObjectId
 	if (!mongoose.Types.ObjectId.isValid(tagId)) {
 	  console.error('Invalid tag ID:', tagId);
 	  return res.sendStatus(400);
@@ -398,15 +385,13 @@ app.get('/questions/:id/delete', isLoggedIn, function (req, res) {
 		return res.sendStatus(404);
 	  }
   
-	  // Initialize responses array if it doesn't exist
+	  
 	  if (!foundQuestion.responses) {
 		foundQuestion.responses = [];
 	  }
   
-	  // Add the new response
 	  foundQuestion.intents[0].responses.push(response);
   
-	  // Save the updated tag
 	  await foundQuestion.save();
   
 	  res.sendStatus(200);
