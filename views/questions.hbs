@@ -12,17 +12,13 @@
         </ul>
 </navbar>
 
-
 <div class="hizmet-kart-icerik">
   <div class="buton-kapsa">
-    
+    <div class="search">
+      <input type="text" id="search-input" class="searchTerm" placeholder="Tag Name">
+    </div>
     {{#each questions}}
       <li class="hizmet-buton">
-        {{!-- <div onclick="openPopup('{{this._id}}')">
-          {{#each this.intents}}
-            <h2>Tag: {{this.tag}}</h2>
-          {{/each}}
-        </div> --}}
         <a href="/tags/{{this._id}}">
         {{#each this.intents}}
             <h2>Tag: {{this.tag}}</h2>
@@ -39,20 +35,24 @@
 <button class="add-btn"> <a href="NewQuestion"><span>Add New Tag</span></a></button>
 <button class="run-btn" onclick="runApp()"><a>Run App</a></button>
 
-<script>
-    function openPopup(intentId) { 
-      const url = `/tags/${intentId}`;
-      const width = 700;
-      const height = 500;
-      const left = (screen.width - width) / 2;
-      const top = (screen.height - height) / 2;
 
-      window.open(
-        url,
-        'myWindow',
-        `width=${width},height=${height},left=${left},top=${top}`
-      );
-    }
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+
+  $(document).ready(function() {
+  $('#search-input').on('input', function() {
+    var searchText = $(this).val().toLowerCase();
+    $('.hizmet-buton').each(function() {
+      var tagText = $(this).find('h2').text().toLowerCase();
+      if (tagText.indexOf(searchText) !== -1) {
+        $(this).show();
+      } else {
+        $(this).hide();
+      }
+    });
+  });
+  });
+
 
     function confirmDelete(intentId) {
     if (confirm('Are you sure you want to delete this tag?')) {
@@ -135,6 +135,27 @@ function runApp() {
         margin-left: 10px;
         cursor: pointer;
     }
+
+    .search {
+  width: 70%;
+  position: relative;
+  display: flex;
+}
+
+.searchTerm {
+  width: 70%;
+  border: 3px solid #00B4CC;
+  border-right: 5px;
+  padding: 10px;
+  height: 20px;
+  border-radius: 5px 0 0 5px;
+  outline: none;
+  color: #9DBFAF;
+}
+
+.searchTerm:focus{
+  color: #00B4CC;
+}
 
 </style>
 

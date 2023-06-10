@@ -142,6 +142,20 @@ app.get('/questions', isLoggedIn, function (req, res) {
 	});
 }); 
 
+app.post('/conversations/batch-delete', async (req, res) => {
+    const { conversationIds } = req.body;
+
+    try {
+        // Delete conversations with the given conversationIds from the database
+        await Conversation.deleteMany({ _id: { $in: conversationIds } });
+        res.sendStatus(200);
+    } catch (error) {
+        console.error(error);
+        res.sendStatus(500);
+    }
+});
+
+
 
 app.get('/NewQuestion', isLoggedIn, function (req, res) {
     res.render('newQuestion', { title: "New Question" });
@@ -172,7 +186,6 @@ app.post('/questions', isLoggedIn, function (req, res) {
 app.get('/tags/:id', isLoggedIn, async (req, res) => {
 	const questionId = req.params.id;
   
-	// Validate the questionId as a valid ObjectId
 	if (!mongoose.Types.ObjectId.isValid(questionId)) {
 	  console.error('Invalid question ID:', questionId);
 	  res.sendStatus(400);

@@ -38,6 +38,19 @@
         margin-left: 10px;
         cursor: pointer;
     }
+
+        .delete-selected-btn {
+        background-color: #b3bd77;
+        border: 5px ;
+        color: white;
+        padding: 5px 10px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin-left: 10px;
+        cursor: pointer;
+    }
 </style>
 
 <navbar class="navbar-container">
@@ -57,6 +70,7 @@
     <ul>
         {{#each conversations}}
             <li class="note">
+                <input type="checkbox" class="conversation-checkbox" value="{{this._id}}">
                 <span class="user">{{this.user_input}}</span>
                 <span class="bot">{{this.bot_response}}</span>
                 <button class="delete-btn" onclick="deleteConv('{{this._id}}')"><i class="material-icons">&#xE15C;</i> <span>Delete</span></button>
@@ -68,18 +82,47 @@
     <p>No conversations found.</p>
 {{/if}}
 
+<button class="delete-selected-btn" onclick="deleteSelectedConversations()"><span>Delete Selected</span></button>
+
 <script>
-    function deleteConv(id) {
-        fetch('/conversations/' + id, { method: 'DELETE' })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to delete conversation');
-                }
-                alert('Conversation deleted successfully!');
-                location.reload();
-            })
-            .catch(error => {
-                console.error(error);
-            });
+  function deleteConv(id) {
+    fetch('/conversations/' + id, { method: 'DELETE' })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete conversation');
+            }
+            alert('Conversation deleted successfully!');
+            location.reload();
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+function deleteSelectedConversations() {
+    const checkboxes = document.querySelectorAll('.conversation-checkbox:checked');
+    if (checkboxes.length === 0) {
+        alert('No conversations selected.');
+        return;
     }
+  
+    const conversationIds = Array.from(checkboxes).map(checkbox => checkbox.value);
+    fetch('/conversations/batch-delete', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ conversationIds })
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete conversations');
+            }
+            alert('Conversations deleted successfully!');
+            location.reload();
+        })
+        .catch(error => {
+            console.error(error);
+        });
+}
+
 </script>
